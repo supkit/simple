@@ -8,9 +8,9 @@ use Exception;
 class Redis extends PhpRedis
 {
     /**
-     * @var null | PhpRedis
+     * @var array | PhpRedis
      */
-    private static $instance = null;
+    private static $instance = [];
 
     /**
      * Redis constructor.
@@ -42,10 +42,10 @@ class Redis extends PhpRedis
      */
     public static function instance($connection = 'master')
     {
-        if (empty(self::$instance)) {
-            self::$instance = new self($connection);
+        if (empty(self::$instance[$connection])) {
+            self::$instance[$connection] = new self($connection);
         }
 
-        return self::$instance;
+        return self::$instance[$connection];
     }
 }

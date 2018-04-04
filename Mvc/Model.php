@@ -52,7 +52,7 @@ abstract class Model
     /**
      * 连接单例
      *
-     * @var null | \PDO
+     * @var array | \PDO
      */
     private static $db = null;
 
@@ -106,11 +106,11 @@ abstract class Model
 
         $config = $config[$connection];
 
-        if (empty(self::$db)) {
-            self::$db = (new MySQL())->connect($config);
+        if (empty(self::$db[$connection])) {
+            self::$db[$connection] = (new MySQL())->connect($config);
         }
 
-        return self::$db;
+        return self::$db[$connection];
     }
 
     /**
@@ -118,7 +118,7 @@ abstract class Model
      */
     public function db()
     {
-        return self::$db;
+        return self::$db[$this->connection];
     }
 
     /**
