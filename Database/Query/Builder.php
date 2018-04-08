@@ -126,6 +126,20 @@ class Builder
      */
     public function where($column, ...$params)
     {
+        return is_array($column) ? implode('', array_map(function ($params) {
+            return $this->whereJoin(array_shift($params), $params);
+        }, $column)) : $this->whereJoin($column, $params);
+    }
+
+    /**
+     * 拼接WHERE
+     *
+     * @param $column
+     * @param array $params
+     * @return string
+     */
+    private function whereJoin($column, array $params)
+    {
         $opera = array_shift($params);
         $value = array_shift($params);
         $connector = array_shift($params);
@@ -149,6 +163,8 @@ class Builder
     }
 
     /**
+     * 合并WHERE后，去掉第一个AND 或者 OR
+     *
      * @return mixed|string
      */
     public function whereFormat()

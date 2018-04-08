@@ -320,7 +320,6 @@ abstract class Model
         $order = empty($this->order) ? '' : $this->order;
         $limit = empty($this->limit) ? '' : $this->limit;
 
-        // $this->limit = ''; $this->order = ''; $this->group = ''; $this->where = '';
         $this->where = $this->limit = $this->order = $this->group = '';
         return $select . $where . $group . $order . $limit;
     }
@@ -368,7 +367,7 @@ abstract class Model
      */
     public function count($isArray = false)
     {
-        $this->fetchStyle = $this->db()::FETCH_ASSOC;
+        $this->fetchStyle = ($this->db())::FETCH_ASSOC;
         $count = $this->first(['count(*) as count']);
         return $isArray ? $count : $count['count'];
     }
@@ -473,10 +472,13 @@ abstract class Model
     /**
      * SQL调试
      *
-     * @return string
+     * @return array
      */
     public function debug()
     {
-        return $this->statement->queryString;
+        return [
+            'query' => $this->statement->queryString,
+            'value' => $this->builder()->value()
+        ];
     }
 }
