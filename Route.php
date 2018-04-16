@@ -95,7 +95,7 @@ class Route
     private function ruleRoute($rule, array $match)
     {
         // 解析出命名空间
-        $position = strpos($rule,'\\');
+        $position = strrpos($rule, '\\');
         $namespace = empty($position) ? '' : substr($rule, 0, $position+1);
         $namespace = $this->namespace.$namespace;
 
