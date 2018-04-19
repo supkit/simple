@@ -38,6 +38,8 @@ class Reader
     }
 
     /**
+     * 读取整个csv的行数
+     *
      * @return int
      */
     public function getLine()
@@ -48,21 +50,42 @@ class Reader
     }
 
     /**
-     * @param int $length
-     * @param int $start
+     * 读取第一行数据
+     *
      * @return array
      */
-    public function getData($length = 0, $start = 0)
+    public function getFirst()
+    {
+        return $this->getData(1, 1);
+    }
+
+    /**
+     * 读取数据
+     *
+     * @param int $start 第一行从1开始
+     * @param int $length 读取的行数 0=读取所有行
+     * @return array
+     */
+    public function getData($start = 1, $length = 0)
     {
         $this->openFile();
         $length = $length ? $length : $this->getLine();
         $data = [];
 
+        $flag = $start === 2 ? true : false;
+        $start = $start - 2;
+        $start = ($start < 0) ? 0 : $start;
+
+        $length = $flag ? $length + 1 : $length;
         $this->fileObject->seek($start);
 
         while ($length-- && !$this->fileObject->eof()) {
             $data[] = $this->fileObject->fgetcsv();
             $this->fileObject->next();
+        }
+
+        if ($flag) {
+            array_shift($data);
         }
 
         return $data;
